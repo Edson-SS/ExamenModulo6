@@ -1,26 +1,25 @@
 ﻿using Domain;
-using Infraestructure;
 using Microsoft.AspNetCore.Mvc;
 using MVCCapas2025.Models;
 using Services;
 
 namespace MVCCapas2025.Controllers
 {
-    public class AlumnoController : Controller
+    public class ProfesoresController : Controller
     {
         public IActionResult Index()
         {
-            AlumnoServices service = new AlumnoServices();
+            ProfesorServices service = new ProfesorServices();
 
-            var alumnos = service.Get();
+            var profesors = service.Get();
 
 
-            var model = alumnos.Select(x => new AlumnoModel
+            var model = profesors.Select(x => new ProfesorModel
             {
-                AlumnoID = x.AlumnoID,
+                ProfesorID = x.ProfesorID,
                 Nombre = x.Nombre,
                 Apellido = x.Apellido,
-                FechaNacimiento = x.FechaNacimiento,
+                Especialidad = x.Especialidad,
                 CorreoElectronico = x.CorreoElectronico
             }).ToList();
             return View(model);
@@ -33,17 +32,17 @@ namespace MVCCapas2025.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Nombre, Apellido, FechaNacimiento, CorreoElectronico")] AlumnoModel model)
+        public IActionResult Create([Bind("Nombre, Apellido, Especialidad, CorreoElectronico")] ProfesorModel model)
         {
 
             if (ModelState.IsValid)
             {
-                AlumnoServices service = new AlumnoServices();
-                var dominio = new Alumno
+                ProfesorServices service = new ProfesorServices();
+                var dominio = new Profesor
                 {
                     Nombre = model.Nombre,
                     Apellido = model.Apellido,
-                    FechaNacimiento = model.FechaNacimiento,
+                    Especialidad = model.Especialidad,
                     CorreoElectronico = model.CorreoElectronico,
                     Estado = true
                 };
@@ -60,15 +59,15 @@ namespace MVCCapas2025.Controllers
             {
                 return NotFound();
             }
-            AlumnoServices service = new AlumnoServices();
-            var alumno = service.BuscarPorID(id);
-            var dominio = new AlumnoModel
+            ProfesorServices service = new ProfesorServices();
+            var profesor = service.BuscarPorID(id);
+            var dominio = new ProfesorModel
             {
-                AlumnoID = alumno.AlumnoID,
-                Nombre = alumno.Nombre,
-                Apellido = alumno.Apellido,
-                FechaNacimiento = alumno.FechaNacimiento,
-                CorreoElectronico = alumno.CorreoElectronico
+                ProfesorID = profesor.ProfesorID,
+                Nombre = profesor.Nombre,
+                Apellido = profesor.Apellido,
+                Especialidad = profesor.Especialidad,
+                CorreoElectronico = profesor.CorreoElectronico
             };
             return View(dominio);
         }
@@ -77,7 +76,7 @@ namespace MVCCapas2025.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            AlumnoServices service = new AlumnoServices();
+            ProfesorServices service = new ProfesorServices();
             service.DeleteLogic(id);
             return RedirectToAction(nameof(Index));
         }
